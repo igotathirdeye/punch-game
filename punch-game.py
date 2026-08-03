@@ -57,11 +57,43 @@ class bullet:
             self.t.hideturtle()
             bullets.remove(self)
             return
-
+            
 while running:
     curtime = time.time()
     dt = curtime - last_time
-    
+    using UnityEngine;
+
+public class EnemyChase : MonoBehaviour
+{
+    public Transform player;           // assign in inspector or find at runtime
+    public float speed = 3f;
+    public float stoppingDistance = 1.2f;
+    public int health = 3;
+
+    void Update()
+    {
+        if (player == null) return;
+        float dist = Vector2.Distance(transform.position, player.position);
+        if (dist > stoppingDistance)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+        }
+        // TODO: play walk/idle animations here based on distance
+    }
+
+    public void TakeDamage(int dmg)
+    {
+        health -= dmg;
+        if (health <= 0) Die();
+        // TODO: spawn hit VFX, play sound
+    }
+
+    void Die()
+    {
+        // TODO: drop loot, play death animation, then:
+        Destroy(gameObject);
+    }
+}
     last_time = curtime
     for i in bullets:
         i.move()
